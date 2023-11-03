@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
-//Sweet alert
+import React, { useState } from 'react';
 import Swal from 'sweetalert2';
-import 'sweetalert2/dist/sweetalert2.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'tailwindcss/tailwind.css'; // Importa los estilos de Tailwind CSS
+import 'react-toastify/dist/ReactToastify.css'; // Importa los estilos de react-toastify
+import 'sweetalert2/dist/sweetalert2.css'; // Importa los estilos de sweetalert2
 
 function App() {
   const formArray = [1, 2, 3];
@@ -86,10 +85,64 @@ const handleCircleClick = (circleNumber) => {
   setForm(circleNumber);
 };
 
+//Enviar la información
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const { name, lastname, age, city, job, address, distric, thana, post } = state;
+
+  // Asegurarse de que todos los campos estén llenos antes de enviar la solicitud
+  if (name && lastname && age && city && job && address && distric && thana && post) {
+    try {
+      const response = await fetch(
+        "https://v1.nocodeapi.com/bryaan159/google_sheets/NhIKfIFrvqzvhNMh?tabId=Sheet1", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify([[name, lastname, age, city, job, address, distric, thana, post, new Date().toLocaleString()]])
+      });
+
+      if (response.ok) {
+        // La solicitud se completó correctamente
+        const data = await response.json();
+        console.log('Datos enviados correctamente:', data);
+        // Limpiar los campos después de enviar los datos
+        setState({
+          name: '',
+          lastname: '',
+          age: '',
+          city: '',
+          job: '',
+          address: '',
+          distric: '',
+          thana: '',
+          post: ''
+        });
+      } else {
+        // La solicitud falló, manejar el error
+        console.error('Error al enviar los datos a la API de Google Sheets');
+      }
+    } catch (error) {
+      // Error en la solicitud fetch
+      console.error('Error en la solicitud fetch:', error);
+    }
+  } else {
+    // Mostrar un mensaje de error si no todos los campos están llenos
+    toast.error('Please fill all fields', {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 800
+    });
+  }
+};
+
+
+
+
 return (
     // fondo gris
     //
-    <div className="w-screen h-screen bg-slate-300 flex flex-col justify-center items-center">
+    <div className="w-screen h-screen bg-slate-300 flex flex-col justify-center items-center" >
       <ToastContainer />
       <h1 className='text-3xl font-bold mb-5'>Design Stickers</h1>
 
@@ -116,10 +169,11 @@ return (
         </div>
 
         {/* Primer formulario */}
+        <form onSubmit={handleSubmit}>
         {
           form === 1 && <div>
             {/* Primera pregunta */}
-            <div className='flex flex-col mb-2'>
+            <div className='flex flex-col mb-2' >
               <label htmlFor='name'>Name</label>
               <input value={state.name} onChange={inputHandler} className='p-2 border border-slate-400
             mt-1 outline-0 focus:border-blue-500' type="text" name='name'
@@ -144,12 +198,13 @@ return (
 
             {/* Botones */}
             <div className='mt-4 flex justify-center items-center'>
-              <button onClick={next} className='px-3 py-2 text-lg rounded-md w-full bg-blue-500 text-white'>Next</button>
+              <button type='submit' onClick={next}className='px-3 py-2 text-lg rounded-md w-full bg-blue-500 text-white'>Next</button>
             </div>
           </div>
         }
-
+      </form>
         {/* Segundo formulario */}
+      <form onSubmit={handleSubmit}>
         {
           form === 2 && <div>
             {/* Primera pregunta */}
@@ -180,12 +235,14 @@ return (
             <div className='mt-4  gap-3 flex justify-center items-center'>
               <button onClick={previus} className='px-3 py-2 text-lg rounded-md w-full bg-gray-300 text-black'>Previus</button>
 
-              <button onClick={next} className='px-3 py-2 text-lg rounded-md w-full bg-blue-500 text-white'>Next</button>
+              <button type='submit'  onClick={next} className='px-3 py-2 text-lg rounded-md w-full bg-blue-500 text-white'>Next</button>
             </div>
           </div>
         }
+      </form>
 
         {/* Tercer Formulario */}
+      <form onSubmit={handleSubmit}>
         {
           form === 3 && <div>
             {/* Primera pregunta */}
@@ -216,11 +273,11 @@ return (
             <div className='mt-4  gap-3 flex justify-center items-center'>
               <button onClick={previus} className='px-3 py-2 text-lg rounded-md w-full bg-gray-300 text-black'>Previus</button>
 
-              <button onClick={finalSubmit} className='px-3 py-2 text-lg rounded-md w-full bg-blue-500 text-white'>Submit</button>
+              <button onClick={finalSubmit} type='submit' className='px-3 py-2 text-lg rounded-md w-full bg-blue-500 text-white'>Submit</button>
             </div>
           </div>
         }
-
+      </form>
       </div>
 
     </div>
