@@ -10,7 +10,8 @@ function App() {
     name: '',
     gender: '',
     age: '',
-    city: '',
+    shopping_frequency: '',
+    size: '',
     job: '',
     address: '',
     distric: '',
@@ -54,13 +55,13 @@ function App() {
       2: 'Please fill out all fields in Form 2!',
     };
 
-    if (form === 1 && state.name && state.gender && state.age) {
+    if (form === 1 && state.name && state.gender && state.age && state.shopping_frequency) {
       // toast.success(successMessages[form], {
       //   position: toast.POSITION.TOP_RIGHT,
       //   autoClose: 400
       // });
       setForm(form + 1);
-    } else if (form === 2 && state.city && state.job && state.address) {
+    } else if (form === 2 && state.size && state.job && state.address) {
       // toast.success(successMessages[form], {
       //   position: toast.POSITION.TOP_RIGHT,
       //   autoClose: 400
@@ -87,10 +88,10 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { name, gender, age, city, job, address, distric, thana, post } = state;
+    const { name, gender, age, shopping_frequency, size, job, address, distric, thana, post } = state;
 
     // Asegurarse de que todos los campos estén llenos antes de enviar la solicitud
-    if (name && gender && age && city && job && address && distric && thana && post) {
+    if (name && gender && age && shopping_frequency && size && job && address && distric && thana && post) {
       try {
         const response = await fetch(
           "https://v1.nocodeapi.com/bryaan159/google_sheets/NhIKfIFrvqzvhNMh?tabId=Sheet1", {
@@ -98,7 +99,7 @@ function App() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify([[name, gender, age, city, job, address, distric, thana, post, new Date().toLocaleString()]])
+          body: JSON.stringify([[name, gender, age, shopping_frequency, size, job, address, distric, thana, post, new Date().toLocaleString()]])
         });
 
         if (response.ok) {
@@ -110,7 +111,8 @@ function App() {
             name: '',
             gender: '',
             age: '',
-            city: '',
+            shopping_frequency: '',
+            size: '',
             job: '',
             address: '',
             distric: '',
@@ -152,7 +154,7 @@ function App() {
           {
             formArray.map((v, i) => <><div
               className={`w-[35px] my-3 text-white rounded-full ${form - 1 === i || form - 1 === i + 1 || form ===
-                  formArray.length ? 'bg-blue-500' : 'bg-slate-400'
+                formArray.length ? 'bg-blue-500' : 'bg-slate-400'
                 } h-[35px] flex justify-center items-center cursor-pointer`} onClick={() => handleCircleClick(v)}>
               {v}
               {/* Colores de las lineas  */}
@@ -171,7 +173,7 @@ function App() {
 
               {/* Primera pregunta */}
               <div className='flex flex-col mb-2' >
-                <label htmlFor='name'>Nombre</label>
+                <label htmlFor='name' className='font-bold'>Nombre</label>
                 <input value={state.name} onChange={inputHandler} className='p-2 border border-slate-400
             mt-1 outline-0 focus:border-blue-500' type="text" name='name'
                   placeholder='Bryan' id='name' />
@@ -179,7 +181,16 @@ function App() {
 
               {/* Segunda pregunta */}
               <div className='flex flex-col mb-2'>
-                <label>Género</label>
+                <label htmlFor='age' className='font-bold'>Edad</label>
+                <input value={state.age} onChange={inputHandler} className='p-2 border border-slate-400
+            mt-1 outline-0 focus:border-blue-500' type="number" name='age'
+                  placeholder='20' id='age' />
+              </div>
+
+              {/* Tercera pregunta */}
+
+              <div className='flex flex-col mb-2'>
+                <label htmlFor='gender' className='font-bold'>Género</label>
                 <div className='flex items-center'>
                   <input
                     type='radio'
@@ -207,21 +218,72 @@ function App() {
                     type='radio'
                     id='binary'
                     name='gender'
-                    value = 'No binario'
-                    checked = {state.gender === 'No binario'}
+                    value='No binario'
+                    checked={state.gender === 'No binario'}
                     onChange={inputHandler}
                   />
                   <label htmlFor='binary' className='ml-2'>No binario</label>
                 </div>
               </div>
 
-              {/* Tercera pregunta */}
+              {/* Cuarta pregunta */}
               <div className='flex flex-col mb-2'>
-                <label htmlFor='age'>Edad</label>
-                <input value={state.age} onChange={inputHandler} className='p-2 border border-slate-400
-            mt-1 outline-0 focus:border-blue-500' type="number" name='age'
-                  placeholder='20' id='age' />
+                <label className='font-bold'>¿Usas stickers a menudo en tu vida diaria?</label>
+
+                {/* Opcion 1 */}
+                <div className='flex items-center'>
+                  <input
+                    type='radio'
+                    id='diario'
+                    name='shopping_frequency'
+                    value='A diario'
+                    checked={state.shopping_frequency === 'A diario'}
+                    onChange={inputHandler}
+                  />
+                  <label htmlFor='diario' className='ml-2'>A diario</label>
+                </div>
+
+                {/* Opcion 2 */}
+                <div className='flex items-center'>
+                  <input
+                    type='radio'
+                    id='varias'
+                    name='shopping_frequency'
+                    value='Varias veces a la semana'
+                    checked={state.shopping_frequency === 'Varias veces a la semana'}
+                    onChange={inputHandler}
+                  />
+                  <label htmlFor='varias' className='ml-2'>Varias veces a la semana</label>
+                </div>
+
+                {/* Opcion 3 */}
+                <div className='flex items-center'>
+                  <input
+                    type='radio'
+                    id='raramente'
+                    name='shopping_frequency'
+                    value='Raramente'
+                    checked={state.shopping_frequency === 'Raramente'}
+                    onChange={inputHandler}
+                  />
+                  <label htmlFor='raramente' className='ml-2'>Raramente</label>
+                </div>
+
+                {/* Opcion 4 */}
+                <div className='flex items-center'>
+                  <input
+                    type='radio'
+                    id='nunca'
+                    name='shopping_frequency'
+                    value='Nunca'
+                    checked={state.shopping_frequency === 'Nunca'}
+                    onChange={inputHandler}
+                  />
+                  <label htmlFor='nunca' className='ml-2'>Nunca</label>
+                </div>
+
               </div>
+
 
               {/* Botones */}
               <div className='mt-4 flex justify-center items-center'>
@@ -231,16 +293,47 @@ function App() {
           }
 
         </form>
+        
         {/* Segundo formulario */}
         <form onSubmit={handleSubmit}>
           {
             form === 2 && <div>
               {/* Primera pregunta */}
               <div className='flex flex-col mb-2'>
-                <label htmlFor='city'>City</label>
-                <input value={state.city} onChange={inputHandler} className='p-2 border border-slate-400
-            mt-1 outline-0 focus:border-blue-500' type="text" name='city'
-                  placeholder='San Salvador' id='city' />
+                <label htmlFor='size' className='font-bold'>¿Tienes preferencia de tamaño para los stickers?</label>
+                <div className='flex items-center'>
+                  <input
+                    type='radio'
+                    id='male'
+                    name='size'
+                    value='Pequeños'
+                    checked={state.size === 'Pequeños'}
+                    onChange={inputHandler}
+                  />
+                  <label htmlFor='male' className='ml-2'>Pequeños (5cm)</label>
+                </div>
+                <div className='flex items-center'>
+                <input
+                    type='radio'
+                    id='male'
+                    name='size'
+                    value='Medianos '
+                    checked={state.size === 'Medianos '}
+                    onChange={inputHandler}
+                  />
+                  <label htmlFor='male' className='ml-2'>Medianos (10cm)</label>
+                </div>
+                <div className='flex items-center'>
+                <input
+                    type='radio'
+                    id='male'
+                    name='size'
+                    value='Grandes'
+                    checked={state.size === 'Grandes'}
+                    onChange={inputHandler}
+                  />
+                  <label htmlFor='male' className='ml-2'>Grandes (mas de 10cm)</label>
+                </div>
               </div>
 
               {/* Segunda pregunta */}
