@@ -217,10 +217,10 @@ function App() {
 
               {/* Tercera pregunta */}
               <div className='flex flex-col mb-2'>
-                <label htmlFor='age'>Age</label>
+                <label htmlFor='age'>Edad</label>
                 <input value={state.age} onChange={inputHandler} className='p-2 border border-slate-400
             mt-1 outline-0 focus:border-blue-500' type="number" name='age'
-                  placeholder='22' id='age' />
+                  placeholder='20' id='age' />
               </div>
 
               {/* Botones */}
