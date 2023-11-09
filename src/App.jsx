@@ -11,9 +11,12 @@ function App() {
     gender: '',
     age: '',
     shopping_frequency: '',
+
     size: '',
-    job: '',
-    address: '',
+    desing_AI: '',
+    pack_surprise: '',
+
+    motivate: '',
     distric: '',
     thana: '',
     post: ''
@@ -29,7 +32,7 @@ function App() {
   }
 
   const finalSubmit = () => {
-    if (state.distric && state.thana && state.post) {
+    if (state.motivate && state.distric && state.thana && state.post) {
       Swal.fire({
         icon: 'success',
         title: 'Formulario enviado con éxito!',
@@ -61,7 +64,7 @@ function App() {
       //   autoClose: 400
       // });
       setForm(form + 1);
-    } else if (form === 2 && state.size && state.job && state.address) {
+    } else if (form === 2 && state.size && state.desing_AI && state.pack_surprise) {
       // toast.success(successMessages[form], {
       //   position: toast.POSITION.TOP_RIGHT,
       //   autoClose: 400
@@ -88,10 +91,14 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { name, gender, age, shopping_frequency, size, job, address, distric, thana, post } = state;
+    const { name, gender, age, shopping_frequency,
+      size, desing_AI, pack_surprise,
+      motivate, distric, thana, post } = state;
 
     // Asegurarse de que todos los campos estén llenos antes de enviar la solicitud
-    if (name && gender && age && shopping_frequency && size && job && address && distric && thana && post) {
+    if (name && gender && age && shopping_frequency
+      && size && desing_AI && pack_surprise &&
+      motivate && distric && thana && post) {
       try {
         const response = await fetch(
           "https://v1.nocodeapi.com/bryaan159/google_sheets/NhIKfIFrvqzvhNMh?tabId=Sheet1", {
@@ -99,7 +106,9 @@ function App() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify([[name, gender, age, shopping_frequency, size, job, address, distric, thana, post, new Date().toLocaleString()]])
+          body: JSON.stringify([[name, gender, age, shopping_frequency,
+            size, desing_AI, pack_surprise,
+            motivate, distric, thana, post, new Date().toLocaleString()]])
         });
 
         if (response.ok) {
@@ -113,8 +122,9 @@ function App() {
             age: '',
             shopping_frequency: '',
             size: '',
-            job: '',
-            address: '',
+            desing_AI: '',
+            pack_surprise: '',
+            motivate: '',
             distric: '',
             thana: '',
             post: ''
@@ -142,11 +152,11 @@ function App() {
   return (
     // fondo gris
     //
-    <div className="w-screen h-screen bg-slate-300 flex flex-col justify-center items-center" >
+    <div className="w-full h-screen bg-slate-300 flex flex-col justify-center items-center" >
       {/* <ToastContainer /> */}
       <h1 className='text-3xl font-bold mb-5'>Design Stickers</h1>
 
-      <div className='card w-[370px] rounded-md shadow-md bg-white p-5'>
+      <div className='card w-[400px] rounded-md shadow-md bg-white p-7'>
 
         {/* Cantidad de formularios */}
         <div className='flex justify-center items-center'>
@@ -293,7 +303,7 @@ function App() {
           }
 
         </form>
-        
+
         {/* Segundo formulario */}
         <form onSubmit={handleSubmit}>
           {
@@ -306,30 +316,30 @@ function App() {
                     type='radio'
                     id='male'
                     name='size'
-                    value='Pequeños'
-                    checked={state.size === 'Pequeños'}
+                    value='Pequeños (5cm)'
+                    checked={state.size === 'Pequeños (5cm)'}
                     onChange={inputHandler}
                   />
                   <label htmlFor='male' className='ml-2'>Pequeños (5cm)</label>
                 </div>
                 <div className='flex items-center'>
-                <input
+                  <input
                     type='radio'
                     id='male'
                     name='size'
-                    value='Medianos '
-                    checked={state.size === 'Medianos '}
+                    value='Medianos (10cm)'
+                    checked={state.size === 'Medianos (10cm)'}
                     onChange={inputHandler}
                   />
                   <label htmlFor='male' className='ml-2'>Medianos (10cm)</label>
                 </div>
                 <div className='flex items-center'>
-                <input
+                  <input
                     type='radio'
                     id='male'
                     name='size'
-                    value='Grandes'
-                    checked={state.size === 'Grandes'}
+                    value='Grandes(+10cm)'
+                    checked={state.size === 'Grandes(+10cm)'}
                     onChange={inputHandler}
                   />
                   <label htmlFor='male' className='ml-2'>Grandes (mas de 10cm)</label>
@@ -338,19 +348,69 @@ function App() {
 
               {/* Segunda pregunta */}
               <div className='flex flex-col mb-2'>
-                <label htmlFor='job'>Job</label>
-                <input value={state.job} onChange={inputHandler} className='p-2 border border-slate-400
-            mt-1 outline-0 focus:border-blue-500' type="text" name='job'
-                  placeholder='Engineering' id='job' />
+                <label className='font-bold' htmlFor='IA'>¿Pagarías más por stickers con diseños generados por inteligencia artificial o efectos especiales?</label>
+                <div className='flex items-center'>
+                  <input
+                    type='radio'
+                    id='desing_AI'
+                    name='desing_AI'
+                    value='Si'
+                    checked={state.desing_AI === 'Si'}
+                    onChange={inputHandler}
+                  />
+                  <label htmlFor='male' className='ml-2'>Si</label>
+                </div>
+                <div className='flex items-center'>
+                  <input
+                    type='radio'
+                    id='desing_AI'
+                    name='desing_AI'
+                    value='No'
+                    checked={state.desing_AI === 'No'}
+                    onChange={inputHandler}
+                  />
+                  <label htmlFor='male' className='ml-2'>No</label>
+                </div>
+                <div className='flex items-center'>
+                  <input
+                    type='radio'
+                    id='desing_AI'
+                    name='desing_AI'
+                    value='No estoy seguro(a)'
+                    checked={state.desing_AI === 'No estoy seguro(a)'}
+                    onChange={inputHandler}
+                  />
+                  <label htmlFor='male' className='ml-2'>No estoy seguro(a)</label>
+                </div>
               </div>
 
               {/* Tercera pregunta */}
               <div className='flex flex-col mb-2'>
-                <label htmlFor='address'>Address</label>
-                <textarea value={state.address} onChange={inputHandler} rows='05' className='p-2 border border-slate-400
-            mt-1 outline-0 focus:border-blue-500' type="text" name='address'
-                  placeholder='Address' id='address' />
+                <label className='font-bold' htmlFor='pack_surprise'>¿Qué opinas sobre la idea de incluir un sticker sorpresa en cada pack?</label>
+                <div className='flex items-center'>
+                  <input
+                    type='radio'
+                    id='pack_surprise'
+                    name='pack_surprise'
+                    value='Me encanta la idea'
+                    checked={state.pack_surprise === 'Me encanta la idea'}
+                    onChange={inputHandler}
+                  />
+                  <label htmlFor='pack_surprise' className='ml-2'>Me encanta la idea</label>
+                </div>
+                <div className='flex items-center'>
+                  <input
+                    type='radio'
+                    id='pack_surprise'
+                    name='pack_surprise'
+                    value='No me interesa'
+                    checked={state.pack_surprise === 'No me interesa'}
+                    onChange={inputHandler}
+                  />
+                  <label htmlFor='male' className='ml-2'>No me interesa</label>
+                </div>
               </div>
+
 
               {/* Botones */}
               <div className='mt-4  gap-3 flex justify-center items-center'>
@@ -366,15 +426,77 @@ function App() {
         <form onSubmit={handleSubmit}>
           {
             form === 3 && <div>
-              {/* Primera pregunta */}
+
+              {/* Cuarta pregunta */}
+              <div className='flex flex-col mb-2'>
+                <label htmlFor='motivate' className='font-bold'>¿Qué te motivaría a comprar stickers personalizados?</label>
+                <div className='flex items-center'>
+                  <input
+                    type='radio'
+                    id='motivate'
+                    name='motivate'
+                    value='Coleccionismo y afición por stickers'
+                    checked={state.motivate === 'Coleccionismo y afición por stickers'}
+                    onChange={inputHandler}
+                  />
+                  <label htmlFor='motivate' className='ml-2'>Coleccionismo y afición por stickers</label>
+                </div>
+                <div className='flex items-center'>
+                  <input
+                    type='radio'
+                    id='motivate'
+                    name='motivate'
+                    value='Uso como decoración personal'
+                    checked={state.motivate === 'Uso como decoración personal'}
+                    onChange={inputHandler}
+                  />
+                  <label htmlFor='male' className='ml-2'>Uso como decoración personal</label>
+                </div>
+
+                <div className='flex items-center'>
+                  <input
+                    type='radio'
+                    id='motivate'
+                    name='motivate'
+                    value='Recuerdos de lugares o eventos especiales'
+                    checked={state.motivate === 'Recuerdos de lugares o eventos especiales'}
+                    onChange={inputHandler}
+                  />
+                  <label htmlFor='motivate' className='ml-2'>Recuerdos de lugares o eventos especiales</label>
+                </div>
+                <div className='flex items-center'>
+                  <input
+                    type='radio'
+                    id='motivate'
+                    name='motivate'
+                    value='Regalos para amigos o familiares'
+                    checked={state.motivate === 'Regalos para amigos o familiares'}
+                    onChange={inputHandler}
+                  />
+                  <label htmlFor='male' className='ml-2'>Regalos para amigos o familiares</label>
+                </div>
+                <div className='flex items-center'>
+                  <input
+                    type='radio'
+                    id='motivate'
+                    name='motivate'
+                    value='Otro'
+                    checked={state.motivate === 'Otro'}
+                    onChange={inputHandler}
+                  />
+                  <label htmlFor='male' className='ml-2'>Otro</label>
+                </div>
+
+              </div>
+              {/* Segunda pregunta */}
               <div className='flex flex-col mb-2'>
                 <label htmlFor='distric'>Distric</label>
                 <input value={state.distric} onChange={inputHandler} className='p-2 border border-slate-400
             mt-1 outline-0 focus:border-blue-500' type="text" name='distric'
-                  placeholder='Distric' id='distric' />
+                  placeholder='District' id='distric' />
               </div>
 
-              {/* Segunda pregunta */}
+              {/* Tercer pregunta */}
               <div className='flex flex-col mb-2'>
                 <label htmlFor='thana'>Thana</label>
                 <input value={state.thana} onChange={inputHandler} className='p-2 border border-slate-400
