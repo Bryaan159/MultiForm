@@ -4,7 +4,7 @@ import 'tailwindcss/tailwind.css';
 import 'sweetalert2/dist/sweetalert2.css';
 
 function App() {
-  const formArray = [1, 2, 3];
+  const formArray = [1, 2, 3, 4];
   const [form, setForm] = useState(formArray[0]);
   const [state, setState] = useState({
     name: '',
@@ -17,7 +17,7 @@ function App() {
     pack_surprise: '',
 
     motivate: '',
-    distric: '',
+    instagram: '',
     thana: '',
     post: ''
   })
@@ -32,7 +32,7 @@ function App() {
   }
 
   const finalSubmit = () => {
-    if (state.motivate && state.distric && state.thana && state.post) {
+    if (state.motivate && state.instagram && state.thana && state.post) {
       Swal.fire({
         icon: 'success',
         title: 'Formulario enviado con éxito!',
@@ -70,11 +70,12 @@ function App() {
       //   autoClose: 400
       // });
       setForm(form + 1);
-    } else {
+    } else if (form === 3 && state.motivate && state.instagram && state.thana && state.post) {
       // toast.error(errorMessages[form], {
       //   position: toast.POSITION.TOP_RIGHT,
       //   autoClose: 400
       // });
+      setForm(form + 1);
     }
   };
 
@@ -93,12 +94,12 @@ function App() {
 
     const { name, gender, age, shopping_frequency,
       size, desing_AI, pack_surprise,
-      motivate, distric, thana, post } = state;
+      motivate, instagram, thana, post } = state;
 
     // Asegurarse de que todos los campos estén llenos antes de enviar la solicitud
     if (name && gender && age && shopping_frequency
       && size && desing_AI && pack_surprise &&
-      motivate && distric && thana && post) {
+      motivate && instagram && thana && post) {
       try {
         const response = await fetch(
           "https://v1.nocodeapi.com/bryaan159/google_sheets/NhIKfIFrvqzvhNMh?tabId=Sheet1", {
@@ -108,7 +109,7 @@ function App() {
           },
           body: JSON.stringify([[name, gender, age, shopping_frequency,
             size, desing_AI, pack_surprise,
-            motivate, distric, thana, post, new Date().toLocaleString()]])
+            motivate, instagram, thana, post, new Date().toLocaleString()]])
         });
 
         if (response.ok) {
@@ -125,7 +126,7 @@ function App() {
             desing_AI: '',
             pack_surprise: '',
             motivate: '',
-            distric: '',
+            instagram: '',
             thana: '',
             post: ''
           });
@@ -152,25 +153,24 @@ function App() {
   return (
     // fondo gris
     //
-    <div className="w-full h-screen bg-slate-300 flex flex-col justify-center items-center" >
+    <div className="w-full min-h-screen bg-slate-300 flex flex-col justify-center items-center">
       {/* <ToastContainer /> */}
       <h1 className='text-3xl font-bold mb-5'>Design Stickers</h1>
 
-      <div className='card w-[400px] rounded-md shadow-md bg-white p-7'>
+      <div className='card w-[378px] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl rounded-md shadow-md bg-white p-7'>
 
         {/* Cantidad de formularios */}
         <div className='flex justify-center items-center'>
           {/* Importante */}
           {
             formArray.map((v, i) => <><div
-              className={`w-[35px] my-3 text-white rounded-full ${form - 1 === i || form - 1 === i + 1 || form ===
-                formArray.length ? 'bg-blue-500' : 'bg-slate-400'
-                } h-[35px] flex justify-center items-center cursor-pointer`} onClick={() => handleCircleClick(v)}>
+            className={`w-[60px] sm:w-[70px] my-3 text-white rounded-full ${form - 1 === i || form - 1 === i + 1 || form - 1 === i + 2 || form === formArray.length ? 'bg-blue-500' : 'bg-slate-400'} h-[40px] flex justify-center items-center cursor-pointer`}
+            onClick={() => handleCircleClick(v)}>
               {v}
               {/* Colores de las lineas  */}
             </div>
               {
-                i !== formArray.length - 1 && <div className={`w-[85px] ${form === i + 2 || form ===
+                i !== formArray.length - 1 && <div className={`w-[85px] ${form === i + 2 || form === i + 3 || form ===
                   formArray.length ? 'bg-blue-600' : 'bg-slate-400'} h-[4px]`}></div>
               }
             </>)
@@ -488,12 +488,33 @@ function App() {
                 </div>
 
               </div>
+
+
               {/* Segunda pregunta */}
               <div className='flex flex-col mb-2'>
-                <label htmlFor='distric'>Distric</label>
-                <input value={state.distric} onChange={inputHandler} className='p-2 border border-slate-400
-            mt-1 outline-0 focus:border-blue-500' type="text" name='distric'
-                  placeholder='District' id='distric' />
+                <label className='font-bold' htmlFor='instagram'>¿Te interesa participar en concursos de diseño en Instagram para crear stickers?</label>
+                <div className='flex items-center'>
+                  <input
+                    type='radio'
+                    id='eventsInstagram'
+                    name='instagram'
+                    value='Me gustaría participar'
+                    checked={state.instagram === 'Me gustaría participar'}
+                    onChange={inputHandler}
+                  />
+                  <label htmlFor='male' className='ml-2'>Me gustaría participar</label>
+                </div>
+                <div className='flex items-center'>
+                  <input
+                    type='radio'
+                    id='eventsInstagram'
+                    name='instagram'
+                    value='No me interesa participar'
+                    checked={state.instagram === 'No me interesa participar'}
+                    onChange={inputHandler}
+                  />
+                  <label htmlFor='male' className='ml-2'>No me interesa participar</label>
+                </div>
               </div>
 
               {/* Tercer pregunta */}
@@ -504,13 +525,6 @@ function App() {
                   placeholder='Thana' id='thana' />
               </div>
 
-              {/* Tercera pregunta */}
-              <div className='flex flex-col mb-2'>
-                <label htmlFor='post'>Post</label>
-                <input value={state.post} onChange={inputHandler} rows='05' className='p-2 border border-slate-400
-            mt-1 outline-0 focus:border-blue-500' type="text" name='post'
-                  placeholder='Post' id='post' />
-              </div>
 
               {/* Botones */}
               <div className='mt-4  gap-3 flex justify-center items-center'>
